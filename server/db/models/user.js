@@ -2,7 +2,7 @@ const crypto = require('crypto');
 const _ = require('lodash');
 const Sequelize = require('sequelize');
 
-const db = require('./base');
+const db = require('../base');
 
 const User = db.define('user', {
     username: {
@@ -13,25 +13,34 @@ const User = db.define('user', {
     email: {
         type: Sequelize.STRING,
         unique: true,
-        allowNull: false
+        allowNull: false,
+        validate: {
+            isEmail: true
+        }
     },
     password: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+            len: [8, 50]
+        }
+    },
+    gold: {
+        type: Sequelize.INTEGER
     },
     salt: {
         type: Sequelize.STRING
     }
 }, {
-        hooks: {
-            beforeCreate: setSaltAndPassword,
+    hooks: {
+        beforeCreate: setSaltAndPassword,
             beforeUpdate: setSaltAndPassword
-        }
-    });
+    }
+});
 
 // instance methods
 User.prototype.correctPassword = function (candidatePassword) {
-    return this.Model.encryptPassword(candidatePassword, this.salt) === this.password;
+    return User.encryptPassword(candidatePassword, this.salt) === this.password;
 };
 
 User.prototype.sanitize = function () {

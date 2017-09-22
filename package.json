@@ -27,6 +27,7 @@
     "query-string": "^5.0.0",
     "react": "^15.6.1",
     "react-bootstrap": "^0.31.3",
+    "redux-devtools-extension": "^2.13.2",
     "react-dom": "^15.6.1",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
@@ -34,7 +35,8 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
     "sentiment": "^4.0.1",
-    "sequelize": "^4.8.3"
+    "sequelize": "^4.8.3",
+    "socket.io": "^2.0.3"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

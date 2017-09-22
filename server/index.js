@@ -4,12 +4,13 @@ const path = require('path');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const passport = require('passport');
-const db = require('./db');
+const db = require('./db/db');
+const User = db.models.user;
 const session = require('express-session');
-
+const interact = require('./interact');
 const app = express()
 
-// general purpose middleware
+// general purpose middlewareo
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -24,7 +25,7 @@ dbStore.sync();
 
 //session middleware
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'a wildly insecure secret',
+  secret: process.env.SESSION_SECRET || 'fluffykins the doggy',
   store: dbStore,
   resave: false,
   saveUninitialized: true
@@ -66,6 +67,9 @@ app.get('*', function (req, res) {
 
 // process.env.PORT for deploying to Heroku or 3000 for local
 const port = process.env.PORT || 1337; 
+
+//change database every 10 seconds
+setInterval(function(){console.log(Math.floor(Math.random()*10))},10000)
 
 // sync our database
 db.sync() 
