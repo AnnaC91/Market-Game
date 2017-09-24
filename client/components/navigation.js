@@ -15,10 +15,10 @@ function Navigation(props) {
 }
 
 const mapState = function (state, ) {
-    const logstatus = state.users.username ? true : false
+    const logstatus = state.user.username ? true : false
     return {
         loggedIn: logstatus,
-        currentUser: state.users
+        currentUser: state.user
     }
 }
 

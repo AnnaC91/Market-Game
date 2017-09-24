@@ -48,6 +48,15 @@ export function logOut(){
     }
 }
 
+export function fetchUser(){
+    return function thunk(dispatch){
+        return axios.get('/api/auth/current')
+        .then(res => {
+            dispatch(getUser(res.data))
+        })
+    }
+}
+
 export default function reducer(state = {}, action) {
   switch (action.type) {
     case GET_USER: return action.user || state

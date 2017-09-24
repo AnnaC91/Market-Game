@@ -1,7 +1,8 @@
 var Promise = require('bluebird');
 var db = require('./server/db/db');
 var Item = db.models.item;
-var Marketinstance = db.models.marketinstance;
+var Iteminstance = db.models.iteminstance;
+var User = db.models.user;
 
 var data = {
     items: [
@@ -20,28 +21,34 @@ var data = {
         { name: 'Leather Armor', description: 'Armor for Ranger, Assassin, Lancer', worth: 100, demand: 85 },
         { name: 'Cloth Armor', description: 'Armor for Caster, Medic', worth: 80, demand: 55 }
     ],
-    marketinstances: [
-        { price: 5, itemId: 1 },
-        { price: 5, itemId: 2 },
-        { price: 5, itemId: 1 },
-        { price: 5, itemId: 2 },
-        { price: 5, itemId: 1 },
-        { price: 5, itemId: 2 },
-        { price: 5, itemId: 1 },
-        { price: 5, itemId: 2 }
+    users: [
+        {username: 'test1', email: 'test@one.com', password: 'hauhau1234', gold: 100}
+    ],
+    iteminstances: [
+        { price: 5, status: 'market', itemId: 1 },
+        { price: 5, status: 'market', itemId: 2 },
+        { price: 5, status: 'market', itemId: 1 },
+        { price: 5, status: 'market', itemId: 2 },
+        { price: 5, status: 'market', itemId: 1 },
+        { price: 5, status: 'market', itemId: 2 },
+        { price: 5, status: 'market', itemId: 1 },
+        { price: 5, status: 'market', itemId: 2 }
     ]
 };
 
 db.sync({ force: true })
     .then(function () {
-        console.log("Dropped old data, now inserting data");
+        console.log("Seed: Dropped old data, now inserting data");
         const creatingItems = Promise.map(data.items, function (item) {
             return Item.create(item);
         });
-        const creatingMarketinstances = Promise.map(data.marketinstances, function (marketinstance) {
-            return Marketinstance.create(marketinstance);
+        const creatingUsers = Promise.map(data.users, function (user) {
+            return User.create(user);
         });
-        return Promise.all([creatingItems, creatingMarketinstances]); // if more tables needed
+        const creatingIteminstances = Promise.map(data.iteminstances, function (iteminstance) {
+            return Iteminstance.create(iteminstance);
+        });
+        return Promise.all([creatingUsers, creatingItems, creatingIteminstances])
     })
     .then(function () {
         console.log('Finished inserting data');

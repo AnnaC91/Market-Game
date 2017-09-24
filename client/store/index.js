@@ -3,12 +3,14 @@ import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
-import users from './users';
+import user from './user';
 import market from './market';
+import inventory from './inventory';
 
 const reducer = combineReducers({
-  users,
-  market
+  user,
+  market,
+  inventory
 });
 
 const store = createStore(
@@ -21,5 +23,6 @@ const store = createStore(
 
 export default store;
 
-export * from './users';
+export * from './user';
 export * from './market';
+export * from './inventory';

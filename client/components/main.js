@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router'
 
 import Navigation from './navigation'
 import Login from './login'
@@ -10,12 +11,17 @@ import Home from './home'
 import Profile from './profile'
 import Market from './market'
 
-import store, { fetchItems } from '../store';
+import store, { fetchItems, fetchUser } from '../store';
 
 class Main extends Component {
 
+    constructor(props){
+        super(props)
+    }
+
     componentDidMount(){
-        store.dispatch(fetchItems())
+        this.props.fetchData()
+        this.props.fetchCurrentUser()
     }
 
     render() {
@@ -38,6 +44,15 @@ class Main extends Component {
 
 const mapState = null
 
-const mapDispatch = null
+const mapDispatch = function(dispatch){
+    return {
+        fetchData(){
+            dispatch(fetchItems())
+        },
+        fetchCurrentUser(){
+            dispatch(fetchUser())
+        }
+    }
+}
 
-export default Main
+export default withRouter(connect(mapState, mapDispatch)(Main))
