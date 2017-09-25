@@ -1,4 +1,5 @@
 import axios from 'axios';
+import socket from '../socket';
 
 //TYPES
 const GET_ITEMS = 'GET_ITEMS'
@@ -24,7 +25,10 @@ export function buyItem(transactionObj){
     return function thunk(dispatch){
         return axios.put('/api/trade/buy', transactionObj)
         .then(res=>res.data)
-        .then(items => dispatch(getItems(items)))
+        .then(items => {
+            dispatch(getItems(items))
+            socket.emit('buy-item', items)
+        })
     }
 }
 
@@ -32,7 +36,10 @@ export function cancelListing(transactionObj){
     return function thunk(dispatch){
         return axios.put('/api/trade/cancel', transactionObj)
         .then(res=>res.data)
-        .then(items => dispatch(getItems(items)))
+        .then(items => {
+            dispatch(getItems(items))
+            socket.emit('cancel-listing', items)
+        })
     }
 }
 

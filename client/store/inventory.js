@@ -1,4 +1,6 @@
 import axios from 'axios';
+import socket from '../socket';
+import { getItems } from './market'
 
 //TYPES
 const GET_INVENTORY = 'GET_INVENTORY'
@@ -24,7 +26,16 @@ export function sellItem(transactionObj){
     return function thunk(dispatch){
         return axios.put('/api/trade/sell', transactionObj)
         .then(res=>res.data)
-        .then(items => dispatch(getInventory(items)))
+        .then(items => {
+            dispatch(getInventory(items))
+        })
+        .then(()=>{
+            return axios.get('/api/market')
+            .then(res=>res.data)
+            .then(items=>{
+                socket.emit('list-item', items)
+            })
+        })
     }
 }
 

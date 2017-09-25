@@ -10,7 +10,7 @@ const session = require('express-session');
 const interact = require('./interact');
 const app = express()
 
-// general purpose middlewareo
+// general purpose middleware
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -66,16 +66,37 @@ app.get('*', function (req, res) {
 });
 
 // process.env.PORT for deploying to Heroku or 3000 for local
-const port = process.env.PORT || 1337; 
+const port = process.env.PORT || 1337;
+
+//randomnumbers
+function randomnum() { console.log(Math.floor(Math.random() * 10)) }
 
 //change database every 10 seconds
-setInterval(function(){console.log(Math.floor(Math.random()*10))},10000)
+setInterval(interact, 10000)
 
 // sync our database
-db.sync() 
-  .then(function(){
-  	// then start listening with our express server once we have synced
-    app.listen(port, function () {
-	  console.log(`Game Start: ${port}`);
-	}) 
-  });
+db.sync()
+  .then(function () {
+    // then start listening with our express server once we have synced
+    return app.listen(port, function () {
+      console.log(`Game Start: ${port}`);
+    })
+  })
+  .then(server => {
+    const io = require('socket.io')(server);
+    io.on('connection', function (socket) {
+      console.log('connected')
+      socket.on('buy-item', items => {
+        console.log('buy-item')
+        socket.broadcast.emit('buy-item', items)
+      })
+      socket.on('cancel-listing', items => {
+        console.log('cancel-listing')
+        socket.broadcast.emit('cancel-listing', items)
+      })
+      socket.on('list-item', items => {
+        console.log('list-item')
+        socket.broadcast.emit('list-item', items)
+      })
+    })
+  })
