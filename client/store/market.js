@@ -20,6 +20,22 @@ export function fetchItems(){
     }
 }
 
+export function buyItem(transactionObj){
+    return function thunk(dispatch){
+        return axios.put('/api/trade/buy', transactionObj)
+        .then(res=>res.data)
+        .then(items => dispatch(getItems(items)))
+    }
+}
+
+export function cancelListing(transactionObj){
+    return function thunk(dispatch){
+        return axios.put('/api/trade/cancel', transactionObj)
+        .then(res=>res.data)
+        .then(items => dispatch(getItems(items)))
+    }
+}
+
 //REDUCER
 export default function reducer(state=[], action){
     switch(action.type){

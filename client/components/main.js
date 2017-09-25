@@ -27,6 +27,7 @@ class Main extends Component {
     render() {
         return (
             <div>
+                <Link to={`/`}><h1>Market</h1></Link>
                 <Navigation />
                 <main>
                     <Switch>

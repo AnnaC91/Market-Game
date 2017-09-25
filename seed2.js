@@ -6,8 +6,10 @@ var User = db.models.user;
 
 var data = {
     iteminstances: [
-        { price: 5, status: 'inventory', itemId: 3, userId: 1 },
-        { price: 5, status: 'inventory', itemId: 13, userId: 1 }
+        { price: 0, status: 'inventory', itemId: 3, userId: 1 },
+        { price: 0, status: 'inventory', itemId: 13, userId: 1 },
+        { price: 0, status: 'inventory', itemId: 5, userId: 2 },
+        { price: 0, status: 'inventory', itemId: 13, userId: 2 }
     ]
 };
 

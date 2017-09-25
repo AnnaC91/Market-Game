@@ -22,7 +22,8 @@ var data = {
         { name: 'Cloth Armor', description: 'Armor for Caster, Medic', worth: 80, demand: 55 }
     ],
     users: [
-        {username: 'test1', email: 'test@one.com', password: 'hauhau1234', gold: 100}
+        {username: 'test1', email: 'test@one.com', password: 'hauhau1234', gold: 100},
+        {username: 'test2', email: 'test@two.com', password: 'hauhau1234', gold: 100}
     ],
     iteminstances: [
         { price: 5, status: 'market', itemId: 1 },
