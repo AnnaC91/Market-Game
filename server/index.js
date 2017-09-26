@@ -99,7 +99,12 @@ db.sync()
       
 
       function bot(){
-        y=interact()
+        interact()
+        Iteminstance.findAll({
+          where: {
+            status: 'market'
+          }
+        })
         //can get emit to work from backend but will need interact to return my list of objects somehow
         socket.emit('bot-updates', [{id: 0, price: 0, item: {name: 'testitem1', description: 'testing', worth: 0}}])
         console.log('y',y)

@@ -12,7 +12,6 @@ function interact(gameEvent) {
     let amount = Math.floor(Math.random() * 20 + 1)
     console.log(decision ? 'selling ' + Math.floor(amount / 2) + ' things' : 'buying ' + amount + ' things')
     //selling
-    let toReturn = []
     if (decision === 0) {
         for (i = 0; i < Math.floor(amount / 2); i++) {
             //randomly deciding on item to sell
