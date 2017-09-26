@@ -14,8 +14,8 @@ router.route('/buy')
             }
         })
             .then(user=>{
-                let buyerTotalGold = user.gold-parseInt(req.body.itemPrice)
-                return User.update({gold: buyerTotalGold}, {
+                let buyerTotalGold = user.gold-parseInt(req.body.itemPrice) //check affordability
+                return User.update({gold: buyerTotalGold}, { //go into if/else
                     where: {
                         id: req.body.buyerId
                     }
@@ -23,7 +23,7 @@ router.route('/buy')
             })
             //adding gold to seller
             .then(() => {
-                if (req.body.sellerId) {
+                if (req.body.sellerId) { //might need transaction check for affordability
                     return User.findOne({
                         where: {
                             id: req.body.sellerId
@@ -40,7 +40,7 @@ router.route('/buy')
             })
             //exchanging ownership of item and removing from marketboard
             .then(() => {
-                return Iteminstance.update(req.body.newInfo, {
+                return Iteminstance.update(req.body.newInfo, { //might need transaction check for affordability
                     where: {
                         id: req.body.itemId
                     }
@@ -85,7 +85,6 @@ router.route('/sell')
 router.route('/cancel')
     //updating status back to inventory with price to 0
     .put(function (req, res, next) {
-        console.log(req.body)
         Iteminstance.update(req.body.newInfo, {
             where: {
                 id: req.body.id

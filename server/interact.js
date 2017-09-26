@@ -4,21 +4,22 @@ var Item = db.models.item;
 var Iteminstance = db.models.iteminstance;
 var User = db.models.user;
 
-function interact() {
+function interact(gameEvent) {
     //deciding if buying or selling items
     console.log('deciding to buy or sell')
     let decision = Math.floor(Math.random() * 2)
     //how many to buy or sell
     let amount = Math.floor(Math.random() * 20 + 1)
-    console.log(decision ? 'selling '+Math.floor(amount/2)+' things' : 'buying '+amount+' things')
+    console.log(decision ? 'selling ' + Math.floor(amount / 2) + ' things' : 'buying ' + amount + ' things')
     //selling
+    let toReturn = []
     if (decision === 0) {
-        for (i = 0; i < Math.floor(amount/2) ; i++) {
+        for (i = 0; i < Math.floor(amount / 2); i++) {
             //randomly deciding on item to sell
             let itemId = Math.floor(Math.random() * 14 + 1)
             //checking presence of item on market
             let priceMultiplier = 0
-            let lowestMarketPrice 
+            let lowestMarketPrice
             let exist = false
             function priceSetter() {
                 //decide price range
@@ -37,6 +38,7 @@ function interact() {
                 }
                 //overpriced (130%-300% of worth)
             }
+
             Iteminstance.findAll({
                 where: {
                     status: 'market',
@@ -66,30 +68,33 @@ function interact() {
                 })
                 .then(() => {
                     //getting item information to know it's worth
-                    Item.findOne({
+                    return Item.findOne({
                         where: {
                             id: itemId
                         }
                     })
-                        .then(item => {
-                            let competingPrice
-                            if (lowestMarketPrice >= item.worth * 0.7 && lowestMarketPrice <= item.worth * 1.3) {
-                                competingPrice = lowestMarketPrice - 1
-                            } else if (lowestMarketPrice < item.worth * 0.7) {
-                                priceSetter()
-                                let randomprice=Math.floor(item.worth*priceMultiplier)
-                                competingPrice = randomprice
-                            } else {
-                                competingPrice = Math.floor(lowestMarketPrice*0.95)
-                            }
-                            let price = exist ? competingPrice : Math.floor(item.worth * priceMultiplier)
-                            let transactionObj = {
-                                price: price,
-                                itemId: item.id,
-                                status: 'market'
-                            }
-                            return Iteminstance.create(transactionObj)
-                        })
+                })
+                .then(item => {
+                    //price finalization
+                    let competingPrice
+                    if (lowestMarketPrice >= item.worth * 0.7 && lowestMarketPrice <= item.worth * 1.3) {
+                        competingPrice = lowestMarketPrice - 1
+                    } else if (lowestMarketPrice < item.worth * 0.7) {
+                        priceSetter()
+                        let randomprice = Math.floor(item.worth * priceMultiplier)
+                        competingPrice = randomprice
+                    } else {
+                        competingPrice = Math.floor(lowestMarketPrice * 0.95)
+                    }
+                    let price = exist ? competingPrice : Math.floor(item.worth * priceMultiplier)
+                    //constructing transaction
+                    let transactionObj = {
+                        price: price,
+                        itemId: item.id,
+                        status: 'market'
+                    }
+                    //updating the database
+                    return Iteminstance.create(transactionObj)
                 })
         }
     } else {
@@ -120,30 +125,30 @@ function interact() {
                         }
                         //find who's selling that item (if it is sold by a player)
                         let sellerId = lowestPricedItem.userId ? lowestPricedItem.userId : 0
-    
+
                         User.findOne({
                             where: {
                                 id: sellerId
                             }
                         })
-                        .then(user=>{
-                            if (user){
-                                return User.update({gold: (user.gold+lowestPricedItem.price)}, {
-                                    where: {
-                                        id: sellerId
-                                    }
-                                })
-                            }
-                        })
-                        .then(()=>{
-                            return Iteminstance.destroy({
-                                where: {
-                                    id: lowestPricedItem.id
+                            .then(user => {
+                                if (user) {
+                                    return User.update({ gold: (user.gold + lowestPricedItem.price) }, {
+                                        where: {
+                                            id: sellerId
+                                        }
+                                    })
                                 }
                             })
-                        })
+                            .then(() => {
+                                return Iteminstance.destroy({
+                                    where: {
+                                        id: lowestPricedItem.id
+                                    }
+                                })
+                            })
                     }
-                    //else don't do anything
+                    //else don't do anything, yet, maybe add demand to item
                 })
         }
     }

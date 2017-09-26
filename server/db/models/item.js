@@ -10,6 +10,9 @@ const Item = db.define('item', {
     description: {
         type: Sequelize.STRING
     },
+    category: {
+        type: Sequelize.STRING
+    },
     worth: {
         type: Sequelize.INTEGER,
         allowNull: false

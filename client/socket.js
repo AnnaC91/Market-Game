@@ -12,6 +12,9 @@ socket.on('connect', function(){
     socket.on('list-item', items=>{
         store.dispatch(getItems(items))
     })
+    socket.on('bot-updates', items=>{
+        store.dispatch(getItems(items))
+    })
 })
 
 export default socket;

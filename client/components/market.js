@@ -48,7 +48,7 @@ class Market extends Component {
     render() {
         return (
             <div>
-                <h1>Welcome to the marketboard! Feel free to browse.</h1>
+                <h1>Welcome to the marketboard!</h1>
                 {this.props.marketplace.map(item => (
                     <div key={item.id}>
                         <h4>{item.item.name}</h4>

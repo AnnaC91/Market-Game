@@ -71,9 +71,6 @@ const port = process.env.PORT || 1337;
 //randomnumbers
 function randomnum() { console.log(Math.floor(Math.random() * 10)) }
 
-//change database every 10 seconds
-setInterval(interact, 10000)
-
 // sync our database
 db.sync()
   .then(function () {
@@ -98,5 +95,17 @@ db.sync()
         console.log('list-item')
         socket.broadcast.emit('list-item', items)
       })
+
+      
+
+      function bot(){
+        y=interact()
+        //can get emit to work from backend but will need interact to return my list of objects somehow
+        socket.emit('bot-updates', [{id: 0, price: 0, item: {name: 'testitem1', description: 'testing', worth: 0}}])
+        console.log('y',y)
+        return y
+      }
+      setInterval(bot, 10000)
+      // socket.on('bot-updates')
     })
   })
