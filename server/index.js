@@ -6,6 +6,8 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const db = require('./db/db');
 const User = db.models.user;
+const Iteminstance = db.models.iteminstance;
+const Item = db.models.item;
 const session = require('express-session');
 const interact = require('./interact');
 const app = express()
@@ -100,17 +102,15 @@ db.sync()
 
       function bot(){
         interact()
-        Iteminstance.findAll({
+        return Iteminstance.findAll({
           where: {
             status: 'market'
-          }
+          },
+          include: [Item]
+        }).then(items => {
+          socket.emit('bot-updates', items)
         })
-        //can get emit to work from backend but will need interact to return my list of objects somehow
-        socket.emit('bot-updates', [{id: 0, price: 0, item: {name: 'testitem1', description: 'testing', worth: 0}}])
-        console.log('y',y)
-        return y
       }
       setInterval(bot, 10000)
-      // socket.on('bot-updates')
     })
   })

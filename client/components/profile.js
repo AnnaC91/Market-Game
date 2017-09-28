@@ -47,9 +47,9 @@ class Profile extends Component {
                 {this.props.inventory.map(item => {
                     return (
                         <div key={item.id}>
-                            <h4>{item.item.name}</h4>
-                            <p>{item.item.description}</p>
-                            <p>Worth: {item.item.worth} gold</p>
+                            <h4 className='item-name'>{item.item.name}</h4>
+                            <p className='item-desc'>{item.item.description}</p>
+                            <p className='item-cost'>Worth: {item.item.worth} gold</p>
                             <form onSubmit={this.setPrice}>
                                 <input
                                     name='id'

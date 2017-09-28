@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { fetchItems, fetchUser, buyItem, cancelListing} from '../store';
+import { fetchItems, fetchUser, buyItem, cancelListing } from '../store';
 
 class Market extends Component {
     constructor(props) {
@@ -32,7 +32,7 @@ class Market extends Component {
         this.props.buy(transactionObj)
     }
 
-    handleCancel(e){
+    handleCancel(e) {
         e.preventDefault()
         let transactionObj = {
             id: e.target.id.value,
@@ -48,12 +48,12 @@ class Market extends Component {
     render() {
         return (
             <div>
-                <h1>Welcome to the marketboard!</h1>
+                <h2>Welcome to the marketboard!</h2>
                 {this.props.marketplace.map(item => (
                     <div key={item.id}>
-                        <h4>{item.item.name}</h4>
-                        <p>{item.item.description}</p>
-                        <p>Price: {item.price} gold</p>
+                        <h4 className='item-name'>{item.item.name}</h4>
+                        <p className='item-desc'>{item.item.description}</p>
+                        <p className='item-cost'>Price: {item.price} gold</p>
                         <form onSubmit={this.handleSubmit}>
                             <input
                                 name='sellerId'
@@ -126,7 +126,7 @@ const mapDispatch = function (dispatch) {
         buy(transactionObj) {
             dispatch(buyItem(transactionObj))
         },
-        cancelSale(transactionObj){
+        cancelSale(transactionObj) {
             dispatch(cancelListing(transactionObj))
         }
     }

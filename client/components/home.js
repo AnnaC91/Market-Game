@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 export default function Home(){
     return(
         <div>
-            <h1>Play the Market Game!</h1>
-            <p>...Where you got fed up being an adventurer, realized it doesn't pay well for the danger you take on, and decided to become a merchant!</p>
+            <h2>As a retired adventurer</h2>
+            <p>...you got fed up for the low payments you receive for the dangers you face, and decided to become a merchant!</p>
         </div>
     )
 }

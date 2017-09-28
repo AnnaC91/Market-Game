@@ -13,6 +13,7 @@ socket.on('connect', function(){
         store.dispatch(getItems(items))
     })
     socket.on('bot-updates', items=>{
+        console.log('from sockets: ',items.length)
         store.dispatch(getItems(items))
     })
 })

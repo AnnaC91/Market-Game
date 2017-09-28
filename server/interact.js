@@ -9,11 +9,11 @@ function interact(gameEvent) {
     console.log('deciding to buy or sell')
     let decision = Math.floor(Math.random() * 2)
     //how many to buy or sell
-    let amount = Math.floor(Math.random() * 20 + 1)
+    let amount = Math.floor(Math.random() * 10 + 1)
     console.log(decision ? 'selling ' + Math.floor(amount / 2) + ' things' : 'buying ' + amount + ' things')
     //selling
     if (decision === 0) {
-        for (i = 0; i < Math.floor(amount / 2); i++) {
+        for (i = 0; i < Math.floor(amount / 3); i++) {
             //randomly deciding on item to sell
             let itemId = Math.floor(Math.random() * 14 + 1)
             //checking presence of item on market
@@ -76,7 +76,7 @@ function interact(gameEvent) {
                 .then(item => {
                     //price finalization
                     let competingPrice
-                    if (lowestMarketPrice >= item.worth * 0.7 && lowestMarketPrice <= item.worth * 1.3) {
+                    if (lowestMarketPrice >= item.worth * 0.7 && lowestMarketPrice <= item.worth * 1.3 && lowestMarketPrice>1) {
                         competingPrice = lowestMarketPrice - 1
                     } else if (lowestMarketPrice < item.worth * 0.7) {
                         priceSetter()
@@ -98,7 +98,7 @@ function interact(gameEvent) {
         }
     } else {
         //buying
-        for (j = 0; j < amount.length; j++) {
+        for (j = 0; j < amount; j++) {
             //randomly decide on item to buy
             itemId = Math.floor(Math.random() * 14 + 1)
             //checking presence of item on market
@@ -110,21 +110,26 @@ function interact(gameEvent) {
             })
                 .then(items => {
                     //if instances exist
-                    if (items) {
-                        let lowestPricedItem
+                    if (items.length > 0) {
+                        let lowestPrice
+                        let lowestPricedItemId
+                        let sellerId
                         //loop through array of objects for object with lowest price
                         if (items.length === 1) {
-                            lowestPricedItem = items[0]
+                            lowestPricedItemId = items[0].id
+                            lowestPrice = items[0].price
+                            serllerId = items[0].userId ? items[0].userId : undefined
                         } else {
                             function sortByPrice(a, b) {
                                 return ((a.price > b.price ? 1 : a.price < b.price ? -1 : 0))
                             }
                             let sortedItems = items.sort(sortByPrice)
-                            lowestPricedItem = sortedItems[0]
+                            lowestPricedItemId = sortedItems[0].id
+                            lowestPrice = sortedItems[0].price
+                            sellerId = sortedItems[0].userId ? sortedItems[0].userId : undefined
+                            console.log(sellerId)
                         }
-                        //find who's selling that item (if it is sold by a player)
-                        let sellerId = lowestPricedItem.userId ? lowestPricedItem.userId : 0
-
+                        console.log('line 128: ',lowestPricedItemId, lowestPrice,sellerId)
                         User.findOne({
                             where: {
                                 id: sellerId
@@ -132,7 +137,7 @@ function interact(gameEvent) {
                         })
                             .then(user => {
                                 if (user) {
-                                    return User.update({ gold: (user.gold + lowestPricedItem.price) }, {
+                                    return User.update({ gold: (parseInt(user.gold) + parseInt(lowestPrice)) }, {
                                         where: {
                                             id: sellerId
                                         }
@@ -142,7 +147,7 @@ function interact(gameEvent) {
                             .then(() => {
                                 return Iteminstance.destroy({
                                     where: {
-                                        id: lowestPricedItem.id
+                                        id: lowestPricedItemId
                                     }
                                 })
                             })
