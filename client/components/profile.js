@@ -42,7 +42,7 @@ class Profile extends Component {
     render() {
         return (
             <div>
-                <h1>{this.props.currentUser.username}'s Profile</h1>
+                <h2>{this.props.currentUser.username}'s Profile</h2>
                 <p>Your total gold: {this.props.currentUser.gold}</p>
                 {this.props.inventory.map(item => {
                     return (

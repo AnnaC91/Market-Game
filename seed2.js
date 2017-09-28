@@ -11,7 +11,6 @@ var data = {
         { price: 0, status: 'inventory', itemId: 5, userId: 2 },
         { price: 0, status: 'inventory', itemId: 13, userId: 2 },
         { price: 100, status: 'market', itemId: 10, userId: 1 },
-        { price: 1000, status: 'market', itemId: 14, userId: 1 },
     ]
 };
 

@@ -9,11 +9,11 @@ function interact(gameEvent) {
     console.log('deciding to buy or sell')
     let decision = Math.floor(Math.random() * 2)
     //how many to buy or sell
-    let amount = Math.floor(Math.random() * 10 + 1)
+    let amount = Math.floor(Math.random() * 20 + 1)
     console.log(decision ? 'selling ' + Math.floor(amount / 2) + ' things' : 'buying ' + amount + ' things')
     //selling
     if (decision === 0) {
-        for (i = 0; i < Math.floor(amount / 3); i++) {
+        for (i = 0; i < Math.floor(amount / 2); i++) {
             //randomly deciding on item to sell
             let itemId = Math.floor(Math.random() * 14 + 1)
             //checking presence of item on market
